@@ -84,15 +84,13 @@
       leaving = true;
       e.preventDefault();
       document.documentElement.classList.add('is-leaving');
-      setTimeout(function () { window.location.href = href; }, 220);
-    });
-
-    // Fix bfcache (Back/Forward button) leaving the page invisible
-    window.addEventListener('pageshow', function (e) {
-      if (e.persisted || document.documentElement.classList.contains('is-leaving')) {
-        document.documentElement.classList.remove('is-leaving');
-        leaving = false;
-      }
+      setTimeout(function () { 
+        window.location.href = href; 
+        setTimeout(function() {
+          document.documentElement.classList.remove('is-leaving');
+          leaving = false;
+        }, 300);
+      }, 220);
     });
 
   }
@@ -103,5 +101,12 @@
   } else {
     init();
   }
+
+  // Fix bfcache (Back/Forward button) leaving the page invisible
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted || document.documentElement.classList.contains('is-leaving')) {
+      document.documentElement.classList.remove('is-leaving');
+    }
+  });
 
 })();
