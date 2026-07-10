@@ -560,51 +560,63 @@ html.is-leaving #nav {
   background: rgba(85, 0, 0, .04);
 }
 
-/* Animated attention border for the Read Mode entry point */
-@property --read-border-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
+/* High-contrast moving-light border for the Read Mode entry point */
+.read-mode-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #fff;
+  border: 0;
+  background: var(--crimson-dark);
+  box-shadow: 0 4px 14px rgba(85, 0, 0, .28);
+  padding: 11px 21px;
 }
 
-.read-mode-btn {
-  --read-border-angle: 0deg;
-  color: var(--ink);
-  border: 2px solid transparent;
-  background:
-    linear-gradient(var(--surface), var(--surface)) padding-box,
-    conic-gradient(from var(--read-border-angle),
-      var(--crimson-dark),
-      #d97706,
-      #2563eb,
-      #7c3aed,
-      var(--crimson-dark)) border-box;
-  box-shadow: 0 0 0 1px rgba(85, 0, 0, .06), 0 3px 12px rgba(85, 0, 0, .12);
-  animation: read-border-spin 3s linear infinite;
+.read-mode-btn::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  inset: -180%;
+  background: conic-gradient(transparent 0deg 245deg,
+      #00e5ff 275deg,
+      #ffd84d 310deg,
+      #ffffff 330deg,
+      transparent 360deg);
+  animation: read-border-spin 2.2s linear infinite;
+}
+
+.read-mode-btn::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: calc(var(--r-sm) - 2px);
+  background: linear-gradient(135deg, #550000, #810000);
+}
+
+.read-mode-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
 }
 
 .read-mode-btn:hover {
-  color: var(--crimson-dark);
-  background:
-    linear-gradient(#fff8f8, #fff8f8) padding-box,
-    conic-gradient(from var(--read-border-angle),
-      var(--crimson-dark),
-      #d97706,
-      #2563eb,
-      #7c3aed,
-      var(--crimson-dark)) border-box;
-  box-shadow: 0 5px 18px rgba(85, 0, 0, .22);
+  color: #fff;
+  background: var(--crimson-dark);
+  box-shadow: 0 6px 22px rgba(85, 0, 0, .38), 0 0 14px rgba(0, 229, 255, .25);
   transform: translateY(-1px);
 }
 
 @keyframes read-border-spin {
   to {
-    --read-border-angle: 360deg;
+    transform: rotate(360deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .read-mode-btn {
+  .read-mode-btn::before {
     animation: none;
   }
 }
